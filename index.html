@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>RN ENGENHARIA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <!-- Importação do Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // Sua configuração do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCZbMGQrZSwWkDnygFH59QYikHbcBNGzpM",
+      authDomain: "engenharia-99675.firebaseapp.com",
+      projectId: "engenharia-99675",
+      storageBucket: "engenharia-99675.firebasestorage.app",
+      messagingSenderId: "1093040178852",
+      appId: "1:1093040178852:web:d44998e39b8edf94bd8831",
+      measurementId: "G-ZP0C3X38VV"
+    };
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Tornar db acessível globalmente
+    window.db = db;
+    window.firestore = { collection, addDoc };
+  </script>
+
+  <style>
+    :root {
+      --primaria: #1a1a1a;
+      --secundaria: #404040;
+      --destaque: #666666;
+      --fundo: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+      --texto: #222222;
+      --card-bg: #ffffff;
+      --gradient-dark: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+      --gradient-light: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+
+    body {
+      background: var(--fundo);
+      color: var(--texto);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--gradient-dark);
+      color: #ffffff;
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      border-bottom: 3px solid #404040;
+    }
+
+    header .logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      background: linear-gradient(45deg, #ffffff, #cccccc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    nav a {
+      color: #e0e0e0;
+      margin-left: 24px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 5px 10px;
+      border-radius: 4px;
+    }
+
+    nav a:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.1);
+      text-decoration: none;
+    }
+
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 60px 32px;
+      background: var(--gradient-light);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-dark);
+    }
+
+    .hero-text {
+      flex: 1 1 300px;
+      padding-right: 32px;
+    }
+
+    .hero-text h1 {
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+      color: var(--primaria);
+      line-height: 1.3;
+      font-weight: 700;
+    }
+
+    .hero-text p {
+      margin-bottom: 24px;
+      font-size: 1.05rem;
+      color: #444444;
+    }
+
+    .hero-text .btn {
+      display: inline-block;
+      padding: 12px 28px;
+      background: var(--gradient-dark);
+      color: #ffffff;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+    }
+
+    .hero-text .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .hero-image {
+      flex: 1 1 260px;
+      min-height: 280px;
+      background: var(--gradient-dark);
+      border-radius: 12px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 32px;
+      margin-top: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-image::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(0,0,0,0.2), rgba(255,255,255,0.1));
+    }
+
+    .hero-image h2 {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-image p {
+      font-size: 1rem;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+    }
+
+    section {
+      padding: 60px 32px;
+    }
+
+    section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 24px;
+      color: var(--primaria);
+      font-weight: 700;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    section h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: var(--gradient-dark);
+      border-radius: 2px;
+    }
+
+    .sobre p {
+      max-width: 800px;
+      margin-bottom: 16px;
+      font-size: 1.05rem;
+      color: #444444;
+      line-height: 1.7;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 24px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      border: 1px solid #e0e0e0;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+      border-color: #cccccc;
+    }
+
+    .card h3 {
+      margin-bottom: 12px;
+      color: var(--primaria);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: #666666;
+      line-height: 1.6;
+    }
+
+    .contato-form {
+      max-width: 600px;
+      background: var(--card-bg);
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border: 1px solid #e0e0e0;
+      margin-top: 24px;
+    }
+
+    .contato-form label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #444444;
+    }
+
+    .contato-form input,
+    .contato-form textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+      border: 1px solid #cccccc;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: #f8f9fa;
+    }
+
+    .contato-form input:focus,
+    .contato-form textarea:focus {
+      outline: none;
+      border-color: #666666;
+      box-shadow: 0 0 0 3px rgba(102,102,102,0.1);
+      background: #ffffff;
+    }
+
+    .contato-form textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .contato-form button {
+      background: var(--gradient-dark);
+      color: #ffffff;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .contato-form button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .contato-form button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .footer {
+      background: var(--gradient-dark);
+      color: #e0e0e0;
+      padding: 32px;
+      font-size: 0.9rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 20px;
+      border-top: 3px solid #404040;
+    }
+
+    .footer div {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .footer div:last-child {
+      text-align: right;
+    }
+
+    .mensagem-resultado {
+      font-size: 0.95rem;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: 500;
+      display: none;
+    }
+
+    .sucesso {
+      background: linear-gradient(135deg, #d4edda, #c3e6cb);
+      color: #155724;
+      border: 1px solid #b1dfbb;
+      display: block;
+    }
+
+    .erro {
+      background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+      color: #721c24;
+      border: 1px solid #f1b0b7;
+      display: block;
+    }
+
+    .carregando {
+      background: linear-gradient(135deg, #e2e3e5, #d6d8db);
+      color: #383d41;
+      border: 1px solid #d6d8db;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px;
+      }
+      nav {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      nav a {
+        margin-left: 0;
+        margin-right: 12px;
+      }
+      .hero {
+        padding: 40px 16px;
+      }
+      .hero-text {
+        padding-right: 0;
+        margin-bottom: 24px;
+      }
+      section {
+        padding: 40px 16px;
+      }
+      .contato-form {
+        padding: 24px;
+      }
+      .footer {
+        flex-direction: column;
+        text-align: center;
+      }
+      .footer div:last-child {
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-text h1 {
+        font-size: 1.8rem;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">RN ENGENHARIA</div>
+    <nav>
+      <a href="#sobre">Sobre</a>
+      <a href="#servicos">Serviços</a>
+      <a href="#portfolio">Projetos</a>
+      <a href="#contato">Orçamento</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Projetos e obras com segurança, qualidade e responsabilidade.</h1>
+      <p>
+        A RN ENGENHARIA oferece soluções completas em projetos, gestão e execução
+        de obras para empresas e residências, com foco em segurança estrutural e
+        cumprimento de prazos.
+      </p>
+      <a href="#contato" class="btn">Solicitar orçamento</a>
+    </div>
+    <div class="hero-image">
+      <div>
+        <h2>Engenharia que gera confiança</h2>
+        <p>Consultoria, projetos, laudos e execução com equipe técnica especializada.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="sobre" class="sobre">
+    <h2>Sobre a RN ENGENHARIA</h2>
+    <p>
+      A RN ENGENHARIA é uma empresa focada em entregar soluções técnicas de alto
+      padrão em engenharia civil e áreas correlatas. Atuamos desde o estudo de
+      viabilidade até a entrega da obra, com acompanhamento técnico em todas as etapas.
+    </p>
+    <p>
+      Nossa equipe é composta por engenheiros e parceiros qualificados, comprometidos
+      com segurança, transparência e resultado para o cliente.
+    </p>
+  </section>
+
+  <section id="servicos">
+    <h2>Serviços</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Projetos Estruturais</h3>
+        <p>Dimensionamento e detalhamento de estruturas em concreto armado, metálicas e mistas.</p>
+      </div>
+      <div class="card">
+        <h3>Laudos e Vistorias</h3>
+        <p>Inspeções técnicas, pareceres, laudos e relatórios para condomínios, empresas e residências.</p>
+      </div>
+      <div class="card">
+        <h3>Gestão e Fiscalização de Obras</h3>
+        <p>Acompanhamento completo da execução, qualidade, custos e prazos da obra.</p>
+      </div>
+      <div class="card">
+        <h3>Reformas e Adequações</h3>
+        <p>Planejamento e execução de reformas, ampliações e adequações às normas técnicas.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="portfolio">
+    <h2>Projetos Recentes</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Edifício Residencial</h3>
+        <p>Projeto estrutural e acompanhamento de obra de edifício multifamiliar.</p>
+      </div>
+      <div class="card">
+        <h3>Galpão Industrial</h3>
+        <p>Solução em estrutura metálica com foco em rapidez de montagem e segurança.</p>
+      </div>
+      <div class="card">
+        <h3>Reforma Comercial</h3>
+        <p>Reforma completa de espaço comercial com adequação às normas de acessibilidade.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contato">
+    <h2>Solicite seu Orçamento</h2>
+    <p>Preencha os dados abaixo e retornaremos com uma proposta personalizada.</p>
+
+    <div class="contato-form">
+      <form id="orcamentoForm">
+        <label for="nome">Nome completo</label>
+        <input type="text" id="nome" name="nome" required />
+
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="telefone">Telefone / WhatsApp</label>
+        <input type="tel" id="telefone" name="telefone" required />
+
+        <label for="tipo">Tipo de serviço (ex.: projeto estrutural, laudo, reforma...)</label>
+        <input type="text" id="tipo" name="tipo" required />
+
+        <label for="mensagem">Descreva o que você precisa</label>
+        <textarea id="mensagem" name="mensagem" required></textarea>
+
+        <button type="submit" id="submitBtn">Enviar orçamento</button>
+        <div id="resultado" class="mensagem-resultado"></div>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div>© <span id="ano"></span> RN ENGENHARIA - Todos os direitos reservados.</div>
+    <div>Contato: contato@rningenharia.com.br | Cidade / UF</div>
+  </footer>
+
+  <script type="module">
+    const form = document.getElementById("orcamentoForm");
+    const resultado = document.getElementById("resultado");
+    const submitBtn = document.getElementById("submitBtn");
+    const ano = document.getElementById("ano");
+    ano.textContent = new Date().getFullYear();
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      // Desabilitar botão para evitar múltiplos envios
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Enviando...";
+      
+      // Mostrar mensagem de carregamento
+      resultado.textContent = "Enviando seu orçamento...";
+      resultado.className = "mensagem-resultado carregando";
+
+      try {
+        // Coletar dados do formulário
+        const dadosOrcamento = {
+          nome: form.nome.value,
+          email: form.email.value,
+          telefone: form.telefone.value,
+          tipo: form.tipo.value,
+          mensagem: form.mensagem.value,
+          data: new Date().toISOString(),
+          status: "pendente"
+        };
+
+        // Salvar no Firestore
+        const docRef = await window.firestore.addDoc(
+          window.firestore.collection(window.db, "orcamentos"),
+          dadosOrcamento
+        );
+
+        // Sucesso
+        resultado.textContent = "✅ Orçamento enviado com sucesso! ID: " + docRef.id + ". Em breve entraremos em contato.";
+        resultado.className = "mensagem-resultado sucesso";
+        form.reset();
+
+        // Limpar mensagem após 10 segundos
+        setTimeout(() => {
+          resultado.style.display = 'none';
+        }, 10000);
+
+      } catch (error) {
+        console.error("Erro ao salvar no Firestore:", error);
+        resultado.textContent = "❌ Erro ao enviar orçamento. Tente novamente ou entre em contato por telefone.";
+        resultado.className = "mensagem-resultado erro";
+      } finally {
+        // Reabilitar botão
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Enviar orçamento";
+      }
+    });
+
+    // Scroll suave para âncoras
+    document.querySelectorAll('nav a').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        if(targetId.startsWith('#')) {
+          const targetElement = document.querySelector(targetId);
+          if(targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
